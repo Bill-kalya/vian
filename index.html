@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Graduation | Class of 2023</title>
+    <title>Vivian's Graduation Party</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        /* All your existing CSS remains the same */
         * {
             margin: 0;
             padding: 0;
@@ -337,6 +338,82 @@
             margin-top: 0.5rem;
         }
 
+        /* Upload Section */
+        .upload-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold-glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gold);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .upload-area.active {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold-light);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-preview {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .upload-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
         /* Countdown */
         .countdown {
             display: flex;
@@ -529,6 +606,22 @@
             animation: fadeIn 0.8s ease forwards;
         }
 
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--glass-shadow);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .hero {
@@ -590,6 +683,10 @@
 
             .photo-gallery {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .upload-actions {
+                flex-direction: column;
             }
         }
 
@@ -658,9 +755,9 @@
         <main>
             <section class="hero glass-card fade-in" id="hero">
                 <div class="hero-content">
-                    <h1>Congratulations Graduate!</h1>
-                    <p>We are incredibly proud of all our graduates who have worked tirelessly to reach this milestone. Your dedication, perseverance, and hard work have brought you to this momentous occasion.</p>
-                    <p>This website is dedicated to celebrating your achievements and preserving the memories of this special time in your lives.</p>
+                    <h1>Congratulations Vivian!</h1>
+                    <p>We are incredibly proud of you for working tirelessly to reach this milestone. Your dedication, perseverance, and hard work have brought you to this momentous occasion.</p>
+                    <p>This website is dedicated to celebrating your achievements and preserving the memories of this special time in your life.</p>
                     <button class="btn" id="uploadBtn">Share Your Photos</button>
                 </div>
                 <div class="hero-image">
@@ -670,7 +767,7 @@
 
             <section id="gallery">
                 <h2 class="section-title">Graduate Gallery</h2>
-                <div class="photo-gallery">
+                <div class="photo-gallery" id="photoGallery">
                     <!-- Photo cards will be generated by JavaScript -->
                 </div>
             </section>
@@ -729,8 +826,25 @@
             <section id="memories" class="glass-card">
                 <h2 class="section-title">Share Your Memories</h2>
                 <p style="text-align: center; margin-bottom: 2rem; color: var(--gold-light);">Upload your graduation photos to be featured in our gallery. Let's create a beautiful collection of memories together!</p>
-                <div style="text-align: center;">
-                    <button class="btn"><i class="fas fa-cloud-upload-alt"></i> Upload Photo</button>
+                
+                <div class="upload-container">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="upload-text">Drag & drop your photo here or click to browse</p>
+                        <input type="file" id="fileInput" class="file-input" accept="image/*">
+                        <button class="btn" id="browseBtn">Browse Files</button>
+                    </div>
+                    
+                    <div class="upload-preview" id="uploadPreview">
+                        <img id="previewImage" class="preview-image" src="" alt="Preview">
+                        <p class="upload-text">Preview of your photo</p>
+                        <div class="upload-actions">
+                            <button class="btn" id="confirmUpload">Upload Photo</button>
+                            <button class="btn btn-secondary" id="cancelUpload">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -743,7 +857,7 @@
         </div>
 
         <footer>
-            <h3>Congratulations Class of 2025!</h3>
+            <h3>Congratulations Vivian!</h3>
             <p>Your journey is just beginning. Wishing you all the success in your future endeavors.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -751,7 +865,7 @@
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin-in"></i></a>
             </div>
-            <p>&copy; 2025 Golden Graduation. All rights reserved.</p>
+            <p>&copy; 2025 Vivian's Graduation. All rights reserved.</p>
         </footer>
     </div>
 
@@ -806,24 +920,19 @@
             });
         });
 
-        // Sample graduate photos
+        // FIXED: Use relative paths or online images instead of local file paths
         const graduatePhotos = [
-            "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-            "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-            "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-            "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            "images/vian1.jpg",
+            "images/vian2.jpg",
+            "images/vian3.jpg",
         ];
 
         // Generate photo gallery
-        const gallery = document.querySelector('.photo-gallery');
+        const gallery = document.getElementById('photoGallery');
         
         // Add actual photos
         graduatePhotos.forEach(photoUrl => {
-            const photoCard = document.createElement('div');
-            photoCard.className = 'photo-card fade-in';
-            photoCard.innerHTML = `<img src="${photoUrl}" alt="Graduate">`;
+            const photoCard = createPhotoCard(photoUrl);
             gallery.appendChild(photoCard);
         });
         
@@ -840,21 +949,47 @@
             gallery.appendChild(photoCard);
         }
 
+        // Function to create a photo card
+        function createPhotoCard(photoUrl) {
+            const photoCard = document.createElement('div');
+            photoCard.className = 'photo-card fade-in';
+            
+            // Create image with error handling
+            const img = document.createElement('img');
+            img.src = photoUrl;
+            img.alt = "Graduate";
+            img.onerror = function() {
+                // If image fails to load, show placeholder
+                this.parentNode.innerHTML = `
+                    <div class="photo-placeholder">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Photo Not Found</span>
+                    </div>
+                `;
+            };
+            
+            photoCard.appendChild(img);
+            
+            // Add click event to open modal
+            photoCard.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                if (img && img.src) {
+                    openModal(img.src);
+                }
+            });
+            
+            return photoCard;
+        }
+
         // Modal functionality
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeModal = document.querySelector('.close-modal');
 
-        // Add click event to all photo cards
-        document.querySelectorAll('.photo-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const img = this.querySelector('img');
-                if (img) {
-                    modal.style.display = 'flex';
-                    modalImg.src = img.src;
-                }
-            });
-        });
+        function openModal(imageSrc) {
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+        }
 
         // Close modal when X is clicked
         closeModal.addEventListener('click', function() {
@@ -868,12 +1003,25 @@
             }
         });
 
-        // Countdown timer
+        // Countdown timer - Updated for December 6th
         function updateCountdown() {
-            const graduationDate = new Date('June 10, 2023 14:00:00').getTime();
+            // Set the graduation date to December 6th of the current year
+            const currentYear = new Date().getFullYear();
+            const graduationDate = new Date(currentYear, 11, 6, 14, 0, 0).getTime(); // December is month 11 (0-indexed)
             const now = new Date().getTime();
             const timeLeft = graduationDate - now;
 
+            // If the date has already passed this year, set it for next year
+            if (timeLeft < 0) {
+                const nextYearGraduationDate = new Date(currentYear + 1, 11, 6, 14, 0, 0).getTime();
+                const timeLeftNextYear = nextYearGraduationDate - now;
+                calculateAndDisplayTime(timeLeftNextYear);
+            } else {
+                calculateAndDisplayTime(timeLeft);
+            }
+        }
+
+        function calculateAndDisplayTime(timeLeft) {
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
@@ -886,7 +1034,7 @@
 
             if (timeLeft < 0) {
                 clearInterval(countdownInterval);
-                document.querySelector('.countdown').innerHTML = '<h3 style="text-align: center; color: var(--gold);">Congratulations Graduates!</h3>';
+                document.querySelector('.countdown').innerHTML = '<h3 style="text-align: center; color: var(--gold);">Congratulations Vivian!</h3>';
             }
         }
 
@@ -917,37 +1065,145 @@
             });
         });
 
-        // Upload button functionality
-        document.querySelectorAll('.btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Create a nice notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: var(--glass);
-                    backdrop-filter: blur(10px);
-                    border: 1px solid var(--gold);
-                    color: var(--gold-light);
-                    padding: 1rem 1.5rem;
-                    border-radius: 10px;
-                    box-shadow: var(--glass-shadow);
-                    z-index: 1000;
-                    animation: fadeIn 0.5s ease;
-                `;
-                notification.textContent = 'Upload feature would open in a real application!';
-                document.body.appendChild(notification);
-                
-                // Remove notification after 3 seconds
-                setTimeout(() => {
-                    notification.style.animation = 'fadeIn 0.5s ease reverse';
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 500);
-                }, 3000);
-            });
+        // Upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const uploadPreview = document.getElementById('uploadPreview');
+        const previewImage = document.getElementById('previewImage');
+        const confirmUpload = document.getElementById('confirmUpload');
+        const cancelUpload = document.getElementById('cancelUpload');
+
+        // Browse button click
+        browseBtn.addEventListener('click', function() {
+            fileInput.click();
         });
+
+        // File input change
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                
+                // Check if file is an image
+                if (!file.type.match('image.*')) {
+                    showNotification('Please select an image file (JPEG, PNG, etc.)');
+                    return;
+                }
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification('File size too large. Please select an image smaller than 5MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    uploadPreview.style.display = 'block';
+                    uploadArea.classList.add('active');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            uploadArea.classList.add('active');
+        }
+
+        function unhighlight() {
+            uploadArea.classList.remove('active');
+        }
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        }
+
+        // Confirm upload
+        confirmUpload.addEventListener('click', function() {
+            if (previewImage.src) {
+                // In a real application, you would upload the image to a server here
+                // For this demo, we'll simulate the upload by adding it to the gallery
+                
+                // Create a new photo card
+                const newPhotoCard = createPhotoCard(previewImage.src);
+                
+                // Add it to the gallery (before the first placeholder if available)
+                const placeholders = document.querySelectorAll('.photo-placeholder');
+                if (placeholders.length > 0) {
+                    placeholders[0].parentNode.replaceWith(newPhotoCard);
+                } else {
+                    // If no placeholders, add to the end
+                    gallery.appendChild(newPhotoCard);
+                }
+                
+                // Reset the upload form
+                resetUploadForm();
+                
+                // Show success message
+                showNotification('Photo uploaded successfully! It has been added to the gallery.');
+                
+                // Scroll to gallery section
+                document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Cancel upload
+        cancelUpload.addEventListener('click', function() {
+            resetUploadForm();
+        });
+
+        // Reset upload form
+        function resetUploadForm() {
+            fileInput.value = '';
+            previewImage.src = '';
+            uploadPreview.style.display = 'none';
+            uploadArea.classList.remove('active');
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'fadeIn 0.5s ease reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
 
         // Add scroll animations
         const observerOptions = {
