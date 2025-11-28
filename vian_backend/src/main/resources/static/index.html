@@ -920,34 +920,39 @@
             });
         });
 
-        // FIXED: Use relative paths or online images instead of local file paths
-        const graduatePhotos = [
-            "images/vian1.jpg",
-            "images/vian2.jpg",
-            "images/vian3.jpg",
-        ];
+        // Load gallery function
+        function loadGallery() {
+            fetch('/api/photos/all')
+                .then(res => res.json())
+                .then(data => {
+                    const gallery = document.getElementById('photoGallery');
+                    gallery.innerHTML = '';
+                    data.forEach(photoUrl => {
+                        const photoCard = createPhotoCard(photoUrl);
+                        gallery.appendChild(photoCard);
+                    });
 
-        // Generate photo gallery
-        const gallery = document.getElementById('photoGallery');
-        
-        // Add actual photos
-        graduatePhotos.forEach(photoUrl => {
-            const photoCard = createPhotoCard(photoUrl);
-            gallery.appendChild(photoCard);
-        });
-        
-        // Add placeholder slots for more photos
-        for (let i = 0; i < 6; i++) {
-            const photoCard = document.createElement('div');
-            photoCard.className = 'photo-card fade-in';
-            photoCard.innerHTML = `
-                <div class="photo-placeholder">
-                    <i class="fas fa-camera"></i>
-                    <span>Add Photo</span>
-                </div>
-            `;
-            gallery.appendChild(photoCard);
+                    // Add placeholders for empty slots
+                    for (let i = 0; i < 6; i++) {
+                        const photoCard = document.createElement('div');
+                        photoCard.className = 'photo-card fade-in';
+                        photoCard.innerHTML = `
+                            <div class="photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>Add Photo</span>
+                            </div>
+                        `;
+                        gallery.appendChild(photoCard);
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to load gallery:', error);
+                    showNotification('Failed to load gallery. Please try again later.');
+                });
         }
+
+        // Initial load
+        loadGallery();
 
         // Function to create a photo card
         function createPhotoCard(photoUrl) {
@@ -1149,30 +1154,34 @@
 
         // Confirm upload
         confirmUpload.addEventListener('click', function() {
-            if (previewImage.src) {
-                // In a real application, you would upload the image to a server here
-                // For this demo, we'll simulate the upload by adding it to the gallery
-                
-                // Create a new photo card
-                const newPhotoCard = createPhotoCard(previewImage.src);
-                
-                // Add it to the gallery (before the first placeholder if available)
-                const placeholders = document.querySelectorAll('.photo-placeholder');
-                if (placeholders.length > 0) {
-                    placeholders[0].parentNode.replaceWith(newPhotoCard);
-                } else {
-                    // If no placeholders, add to the end
-                    gallery.appendChild(newPhotoCard);
-                }
-                
-                // Reset the upload form
-                resetUploadForm();
-                
-                // Show success message
-                showNotification('Photo uploaded successfully! It has been added to the gallery.');
-                
-                // Scroll to gallery section
-                document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Show loading state
+                confirmUpload.disabled = true;
+                confirmUpload.textContent = 'Uploading...';
+
+                fetch('/api/photos/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    showNotification(result);
+                    resetUploadForm();
+
+                    // Refresh the gallery to show the new photo
+                    loadGallery();
+                })
+                .catch(error => {
+                    showNotification('Failed to upload photo: ' + error.message);
+                })
+                .finally(() => {
+                    confirmUpload.disabled = false;
+                    confirmUpload.textContent = 'Upload Photo';
+                });
             }
         });
 
