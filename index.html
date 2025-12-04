@@ -25,6 +25,8 @@
             --glass: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.15);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --heart-red: #FF6B8B;
+            --heart-pink: #FFC1CC;
         }
 
         body {
@@ -321,6 +323,65 @@
             transform: scale(1.1);
         }
 
+        /* Like overlay for photo cards */
+        .photo-like-overlay {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-like-overlay:hover {
+            transform: scale(1.1);
+            background: rgba(255, 107, 139, 0.2);
+        }
+
+        .photo-like-overlay.liked {
+            background: rgba(255, 107, 139, 0.3);
+            border-color: var(--heart-red);
+        }
+
+        .photo-like-overlay.liked i {
+            color: var(--heart-red);
+        }
+
+        .photo-like-overlay i {
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .like-count {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .like-count i {
+            color: var(--heart-pink);
+        }
+
         .photo-placeholder {
             width: 100%;
             height: 100%;
@@ -331,6 +392,7 @@
             background: linear-gradient(135deg, var(--gold-dark), var(--gold));
             color: var(--dark);
             font-size: 3rem;
+            position: relative;
         }
 
         .photo-placeholder span {
@@ -522,12 +584,66 @@
             background: var(--glass);
             backdrop-filter: blur(10px);
             border: 1px solid var(--gold);
+            position: relative;
         }
 
         .modal-content img {
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .modal-like-section {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .modal-like-btn {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+        }
+
+        .modal-like-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 107, 139, 0.2);
+        }
+
+        .modal-like-btn.liked {
+            background: rgba(255, 107, 139, 0.3);
+            border-color: var(--heart-red);
+            color: var(--heart-red);
+        }
+
+        .modal-like-count {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-like-count i {
+            color: var(--heart-pink);
         }
 
         .close-modal {
@@ -602,8 +718,20 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
         .fade-in {
             animation: fadeIn 0.8s ease forwards;
+        }
+
+        .heart-beat {
+            animation: heartBeat 0.6s ease;
         }
 
         /* Notification */
@@ -620,6 +748,57 @@
             box-shadow: var(--glass-shadow);
             z-index: 1000;
             animation: fadeIn 0.5s ease;
+        }
+
+        /* Top Liked Photos Section */
+        .top-liked {
+            margin-bottom: 4rem;
+        }
+
+        .top-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .top-photo-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold-glass-border);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .top-photo-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .top-photo-rank {
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .top-photo-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .top-photo-likes {
+            color: var(--heart-pink);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         /* Responsive Design */
@@ -688,6 +867,22 @@
             .upload-actions {
                 flex-direction: column;
             }
+
+            .modal-like-section {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .modal-like-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .modal-like-count {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -728,6 +923,20 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 1rem;
             }
+            
+            .photo-like-overlay {
+                width: 35px;
+                height: 35px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .like-count {
+                bottom: 10px;
+                left: 10px;
+                padding: 4px 10px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -749,6 +958,7 @@
                 <div class="nav-item" data-target="program">Program</div>
                 <div class="nav-item" data-target="countdown">Countdown</div>
                 <div class="nav-item" data-target="memories">Memories</div>
+                <div class="nav-item" data-target="top-liked">Top Liked</div>
             </nav>
         </header>
 
@@ -767,8 +977,16 @@
 
             <section id="gallery">
                 <h2 class="section-title">Graduate Gallery</h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: var(--gold-light);">Click the heart icon to like your favorite photos!</p>
                 <div class="photo-gallery" id="photoGallery">
                     <!-- Photo cards will be generated by JavaScript -->
+                </div>
+            </section>
+
+            <section id="top-liked" class="top-liked">
+                <h2 class="section-title">Most Liked Photos</h2>
+                <div class="top-photos-grid" id="topPhotosGrid">
+                    <!-- Top liked photos will be generated by JavaScript -->
                 </div>
             </section>
 
@@ -853,6 +1071,15 @@
             <span class="close-modal">&times;</span>
             <div class="modal-content">
                 <img id="modalImage" src="" alt="Enlarged photo">
+                <div class="modal-like-section">
+                    <div class="modal-like-count">
+                        <i class="fas fa-heart"></i>
+                        <span id="modalLikeCount">0</span>
+                    </div>
+                    <div class="modal-like-btn" id="modalLikeBtn">
+                        <i class="far fa-heart"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -920,6 +1147,10 @@
             });
         });
 
+        // Photo data storage with likes
+        let photosData = [];
+        let currentModalPhotoIndex = -1;
+
         // Load gallery function
         function loadGallery() {
             fetch('http://localhost:8080/api/photos/all')
@@ -927,8 +1158,19 @@
                 .then(data => {
                     const gallery = document.getElementById('photoGallery');
                     gallery.innerHTML = '';
-                    data.forEach(photoUrl => {
-                        const photoCard = createPhotoCard(photoUrl);
+                    
+                    // Initialize photos data if empty
+                    if (photosData.length === 0) {
+                        photosData = data.map((photoUrl, index) => ({
+                            id: index,
+                            url: photoUrl,
+                            likes: Math.floor(Math.random() * 50), // Random likes for demo
+                            liked: false
+                        }));
+                    }
+                    
+                    photosData.forEach((photo, index) => {
+                        const photoCard = createPhotoCard(photo, index);
                         gallery.appendChild(photoCard);
                     });
 
@@ -944,24 +1186,79 @@
                         `;
                         gallery.appendChild(photoCard);
                     }
+                    
+                    // Update top liked photos
+                    updateTopLikedPhotos();
                 })
                 .catch(error => {
                     console.error('Failed to load gallery:', error);
                     showNotification('Failed to load gallery. Please try again later.');
+                    // Load demo data if API fails
+                    loadDemoData();
                 });
         }
 
-        // Initial load
-        loadGallery();
+        // Load demo data if API fails
+        function loadDemoData() {
+            photosData = [
+                {
+                    id: 1,
+                    url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 42,
+                    liked: false
+                },
+                {
+                    id: 2,
+                    url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 38,
+                    liked: false
+                },
+                {
+                    id: 3,
+                    url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 56,
+                    liked: false
+                },
+                {
+                    id: 4,
+                    url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 29,
+                    liked: false
+                },
+                {
+                    id: 5,
+                    url: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 67,
+                    liked: false
+                },
+                {
+                    id: 6,
+                    url: 'https://images.unsplash.com/photo-1524178234883-043d5c3f3cf4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    likes: 34,
+                    liked: false
+                }
+            ];
+            
+            const gallery = document.getElementById('photoGallery');
+            gallery.innerHTML = '';
+            
+            photosData.forEach((photo, index) => {
+                const photoCard = createPhotoCard(photo, index);
+                gallery.appendChild(photoCard);
+            });
+            
+            updateTopLikedPhotos();
+        }
 
-        // Function to create a photo card
-        function createPhotoCard(photoUrl) {
+        // Function to create a photo card with like functionality
+        function createPhotoCard(photo, index) {
             const photoCard = document.createElement('div');
             photoCard.className = 'photo-card fade-in';
+            photoCard.dataset.index = index;
             
             // Create image with error handling
             const img = document.createElement('img');
-            img.src = photoUrl;
+            img.src = photo.url;
             img.alt = "Graduate";
             img.onerror = function() {
                 // If image fails to load, show placeholder
@@ -975,25 +1272,127 @@
             
             photoCard.appendChild(img);
             
+            // Create like overlay
+            const likeOverlay = document.createElement('div');
+            likeOverlay.className = `photo-like-overlay ${photo.liked ? 'liked' : ''}`;
+            likeOverlay.innerHTML = `<i class="${photo.liked ? 'fas' : 'far'} fa-heart"></i>`;
+            
+            likeOverlay.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleLike(index, this);
+            });
+            
+            photoCard.appendChild(likeOverlay);
+            
+            // Create like count display
+            const likeCount = document.createElement('div');
+            likeCount.className = 'like-count';
+            likeCount.innerHTML = `<i class="fas fa-heart"></i> <span>${photo.likes}</span>`;
+            photoCard.appendChild(likeCount);
+            
             // Add click event to open modal
             photoCard.addEventListener('click', function() {
                 const img = this.querySelector('img');
                 if (img && img.src) {
-                    openModal(img.src);
+                    currentModalPhotoIndex = index;
+                    openModal(img.src, photo);
                 }
             });
             
             return photoCard;
         }
 
+        // Toggle like function
+        function toggleLike(index, element) {
+            const photo = photosData[index];
+            
+            if (photo.liked) {
+                // Unlike
+                photo.likes--;
+                photo.liked = false;
+                element.classList.remove('liked');
+                element.innerHTML = '<i class="far fa-heart"></i>';
+                showNotification('Photo unliked');
+            } else {
+                // Like
+                photo.likes++;
+                photo.liked = true;
+                element.classList.add('liked');
+                element.innerHTML = '<i class="fas fa-heart"></i>';
+                element.classList.add('heart-beat');
+                setTimeout(() => element.classList.remove('heart-beat'), 600);
+                showNotification('Photo liked!');
+            }
+            
+            // Update like count display
+            const likeCount = element.parentElement.querySelector('.like-count span');
+            likeCount.textContent = photo.likes;
+            
+            // Update modal if open
+            if (currentModalPhotoIndex === index) {
+                document.getElementById('modalLikeCount').textContent = photo.likes;
+                const modalLikeBtn = document.getElementById('modalLikeBtn');
+                modalLikeBtn.classList.toggle('liked', photo.liked);
+                modalLikeBtn.innerHTML = `<i class="${photo.liked ? 'fas' : 'far'} fa-heart"></i>`;
+            }
+            
+            // Update top liked photos
+            updateTopLikedPhotos();
+            
+            // Save to localStorage
+            saveToLocalStorage();
+        }
+
+        // Update top liked photos
+        function updateTopLikedPhotos() {
+            const topPhotosGrid = document.getElementById('topPhotosGrid');
+            if (!topPhotosGrid) return;
+            
+            // Sort photos by likes
+            const sortedPhotos = [...photosData].sort((a, b) => b.likes - a.likes).slice(0, 4);
+            
+            topPhotosGrid.innerHTML = '';
+            
+            sortedPhotos.forEach((photo, index) => {
+                const topPhotoCard = document.createElement('div');
+                topPhotoCard.className = 'top-photo-card fade-in';
+                
+                const rank = ['🥇', '🥈', '🥉', '4️⃣'][index];
+                
+                topPhotoCard.innerHTML = `
+                    <div class="top-photo-rank">${rank}</div>
+                    <img src="${photo.url}" alt="Top Photo ${index + 1}" class="top-photo-image" onerror="this.src='https://via.placeholder.com/300'">
+                    <div class="top-photo-likes">
+                        <i class="fas fa-heart"></i>
+                        <span>${photo.likes} likes</span>
+                    </div>
+                `;
+                
+                topPhotoCard.addEventListener('click', function() {
+                    currentModalPhotoIndex = photosData.findIndex(p => p.id === photo.id);
+                    openModal(photo.url, photo);
+                });
+                
+                topPhotosGrid.appendChild(topPhotoCard);
+            });
+        }
+
         // Modal functionality
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeModal = document.querySelector('.close-modal');
+        const modalLikeBtn = document.getElementById('modalLikeBtn');
+        const modalLikeCount = document.getElementById('modalLikeCount');
 
-        function openModal(imageSrc) {
+        function openModal(imageSrc, photo) {
             modal.style.display = 'flex';
             modalImg.src = imageSrc;
+            
+            if (photo) {
+                modalLikeCount.textContent = photo.likes;
+                modalLikeBtn.classList.toggle('liked', photo.liked);
+                modalLikeBtn.innerHTML = `<i class="${photo.liked ? 'fas' : 'far'} fa-heart"></i>`;
+            }
         }
 
         // Close modal when X is clicked
@@ -1005,6 +1404,18 @@
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.style.display = 'none';
+            }
+        });
+
+        // Modal like button
+        modalLikeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (currentModalPhotoIndex !== -1) {
+                const photoCard = document.querySelector(`.photo-card[data-index="${currentModalPhotoIndex}"]`);
+                const likeOverlay = photoCard?.querySelector('.photo-like-overlay');
+                if (likeOverlay) {
+                    toggleLike(currentModalPhotoIndex, likeOverlay);
+                }
             }
         });
 
@@ -1172,11 +1583,29 @@
                     showNotification(result);
                     resetUploadForm();
 
+                    // Add new photo to photosData
+                    const newPhoto = {
+                        id: photosData.length + 1,
+                        url: result, // Assuming API returns the URL
+                        likes: 0,
+                        liked: false
+                    };
+                    photosData.push(newPhoto);
+                    
                     // Refresh the gallery to show the new photo
                     loadGallery();
                 })
                 .catch(error => {
                     showNotification('Failed to upload photo: ' + error.message);
+                    // For demo purposes, add a placeholder
+                    const newPhoto = {
+                        id: photosData.length + 1,
+                        url: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                        likes: 0,
+                        liked: false
+                    };
+                    photosData.push(newPhoto);
+                    loadGallery();
                 })
                 .finally(() => {
                     confirmUpload.disabled = false;
@@ -1214,6 +1643,35 @@
             }, 3000);
         }
 
+        // Save to localStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('vivianGraduationPhotos', JSON.stringify(photosData));
+            } catch (e) {
+                console.log('LocalStorage is not available');
+            }
+        }
+
+        // Load from localStorage
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('vivianGraduationPhotos');
+                if (saved) {
+                    const savedData = JSON.parse(saved);
+                    // Merge with current photosData
+                    savedData.forEach(savedPhoto => {
+                        const existingIndex = photosData.findIndex(p => p.url === savedPhoto.url);
+                        if (existingIndex !== -1) {
+                            photosData[existingIndex].likes = savedPhoto.likes;
+                            photosData[existingIndex].liked = savedPhoto.liked;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log('Could not load from localStorage');
+            }
+        }
+
         // Add scroll animations
         const observerOptions = {
             threshold: 0.1,
@@ -1241,6 +1699,10 @@
                 mobileMenuBtn.querySelector('i').classList.add('fa-bars');
             }
         });
+
+        // Initial load
+        loadFromLocalStorage();
+        loadGallery();
     </script>
 </body>
 </html>
